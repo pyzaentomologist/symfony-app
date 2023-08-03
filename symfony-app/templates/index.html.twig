@@ -1,0 +1,26 @@
+{% extends 'base.html.twig' %}
+{% block title %}
+ Users Page
+{% endblock %}
+{% block body %}
+{% if(users|length > 0) %}
+
+<h1>
+  Widok użytkowników
+</h1>
+
+{% for user in users %}
+ <h2>
+  {{ user }}
+</h2>
+
+{% endfor %}
+
+{% else %}
+
+<h1>
+  Brak użytkowników!
+</h1>
+
+{% endif %}
+{% endblock %}
