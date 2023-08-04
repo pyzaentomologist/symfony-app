@@ -2,18 +2,28 @@
 
 namespace App\Controller;
 
+use App\Repository\UserRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 class UsersController extends AbstractController
 {
+    private $userRepository;
+    public function __construct(UserRepository $userRepository)
+    {
+        $this->userRepository = $userRepository;
+    }
+
     #[Route('/users', name: 'app_users')]
     public function index(): Response
     {
-        $users = ['1@gmail.com', '12@gmail.com', '3@gmail.com', '4@gmail.com', '5@gmail.com'];
-        return $this->render('index.html.twig', array(
+        $users = ['a@gmail.com', 'b@gmail.com'];
+        // $users = $this->userRepository->findAll();
+        dump($users);
+        return $this->render('react.html.twig', array(
             'users' => $users
         ));
     }
+
 }
