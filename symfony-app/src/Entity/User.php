@@ -16,7 +16,7 @@ class User
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
-    private ?string $name = null;
+    private ?string $firstName = null;
 
     #[ORM\Column(length: 255)]
     private ?string $lastName = null;
@@ -30,29 +30,46 @@ class User
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $describeUser = null;
 
-    #[ORM\OneToOne(mappedBy: 'userId', cascade: ['persist', 'remove'])]
-    private ?Tester $tester = null;
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $testingSystems = null;
 
-    #[ORM\OneToOne(mappedBy: 'userId', cascade: ['persist', 'remove'])]
-    private ?Developer $developer = null;
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $reportingSystems = null;
 
-    #[ORM\OneToOne(mappedBy: 'userId', cascade: ['persist', 'remove'])]
-    private ?ProjectManager $projectManager = null;
+    #[ORM\Column(nullable: true)]
+    private ?bool $seleniumKnowledge = null;
 
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $projectMethodologies = null;
+
+    #[ORM\Column(nullable: true)]
+    private ?bool $scrumKnowledge = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $ideEnvironments = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $programmingLanguages = null;
+
+    #[ORM\Column(nullable: true)]
+    private ?bool $mysqlKnowledge = null;
+
+    #[ORM\Column(length: 255)]
+    private ?string $position = null;
 
     public function getId(): ?int
     {
         return $this->id;
     }
 
-    public function getName(): ?string
+    public function getFirstName(): ?string
     {
-        return $this->name;
+        return $this->firstName;
     }
 
-    public function setName(string $name): static
+    public function setFirstName(string $firstName): static
     {
-        $this->name = $name;
+        $this->firstName = $firstName;
 
         return $this;
     }
@@ -105,56 +122,111 @@ class User
         return $this;
     }
 
-    public function getTester(): ?Tester
+    public function getTestingSystems(): ?string
     {
-        return $this->tester;
+        return $this->testingSystems;
     }
 
-    public function setTester(Tester $tester): static
+    public function setTestingSystems(?string $testingSystems): static
     {
-        // set the owning side of the relation if necessary
-        if ($tester->getUserId() !== $this) {
-            $tester->setUserId($this);
-        }
-
-        $this->tester = $tester;
+        $this->testingSystems = $testingSystems;
 
         return $this;
     }
 
-    public function getDeveloper(): ?Developer
+    public function isSeleniumKnowledge(): ?bool
     {
-        return $this->developer;
+        return $this->seleniumKnowledge;
     }
 
-    public function setDeveloper(Developer $developer): static
+    public function setSeleniumKnowledge(?bool $seleniumKnowledge): static
     {
-        // set the owning side of the relation if necessary
-        if ($developer->getUserId() !== $this) {
-            $developer->setUserId($this);
-        }
-
-        $this->developer = $developer;
+        $this->seleniumKnowledge = $seleniumKnowledge;
 
         return $this;
     }
 
-    public function getProjectManager(): ?ProjectManager
+    public function getprojectMethodologies(): ?string
     {
-        return $this->projectManager;
+        return $this->projectMethodologies;
     }
 
-    public function setProjectManager(ProjectManager $projectManager): static
+    public function setprojectMethodologies(?string $projectMethodologies): static
     {
-        // set the owning side of the relation if necessary
-        if ($projectManager->getUserId() !== $this) {
-            $projectManager->setUserId($this);
-        }
-
-        $this->projectManager = $projectManager;
+        $this->projectMethodologies = $projectMethodologies;
 
         return $this;
     }
 
+    public function getreportingSystems(): ?string
+    {
+        return $this->reportingSystems;
+    }
 
+    public function setreportingSystems(?string $reportingSystems): static
+    {
+        $this->reportingSystems = $reportingSystems;
+
+        return $this;
+    }
+
+    public function isScrumKnowledge(): ?bool
+    {
+        return $this->scrumKnowledge;
+    }
+
+    public function setScrumKnowledge(?bool $scrumKnowledge): static
+    {
+        $this->scrumKnowledge = $scrumKnowledge;
+
+        return $this;
+    }
+
+    public function getIdeEnvironments(): ?string
+    {
+        return $this->ideEnvironments;
+    }
+
+    public function setIdeEnvironments(?string $ideEnvironments): static
+    {
+        $this->ideEnvironments = $ideEnvironments;
+
+        return $this;
+    }
+
+    public function getProgrammingLanguages(): ?string
+    {
+        return $this->programmingLanguages;
+    }
+
+    public function setProgrammingLanguages(?string $programmingLanguages): static
+    {
+        $this->programmingLanguages = $programmingLanguages;
+
+        return $this;
+    }
+
+    public function isMysqlKnowledge(): ?bool
+    {
+        return $this->mysqlKnowledge;
+    }
+
+    public function setMysqlKnowledge(?bool $mysqlKnowledge): static
+    {
+        $this->mysqlKnowledge = $mysqlKnowledge;
+
+        return $this;
+    }
+
+    public function getPosition(): ?string
+    {
+        return $this->position;
+    }
+
+    public function setPosition(string $position): static
+    {
+        $this->position = $position;
+
+        return $this;
+    }
 }
