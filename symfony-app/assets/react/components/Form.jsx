@@ -26,6 +26,11 @@ export default function () {
 
   const [sendData, setSendData] = useState(false);
 
+  const [serverError, setServerError] = useState({
+    errorExist: false,
+    message: "",
+  });
+
   const handleCheckPassword = () => {
     return formData.password === checkPassword.check_password;
   };
@@ -47,14 +52,16 @@ export default function () {
   };
 
   const responseData = () => {
-    return (
-      sendData && (
+    if (sendData) {
+      return (
         <h3>
           Użytkowniku, na podany adress e-mail: {formData.email} został wysłany
           mail z potwierdzeniem rejestracji oraz dane do logowania
         </h3>
-      )
-    );
+      );
+    } else if (serverError.errorExist) {
+      return <h3>{serverError.message}</h3>;
+    }
   };
 
   const handleChangeValue = (e) => {
@@ -85,7 +92,15 @@ export default function () {
         return;
       } else setSendData(false);
     } catch (error) {
-      console.log(error);
+      const message = error.response.data.errors;
+      console.log(message);
+      setServerError({ errorExist: true, message: message });
+      if (message === "This email is already in use.") {
+        setServerError({
+          errorExist: true,
+          message: "Wskazany adres mailowy jest zajęty",
+        });
+      }
     }
   };
 
