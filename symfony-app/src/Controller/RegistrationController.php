@@ -7,6 +7,8 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Services\CreateUser;
+use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
+
 use Exception;
 class RegistrationController extends AbstractController
 {
@@ -31,8 +33,14 @@ class RegistrationController extends AbstractController
 
 
     #[Route('/login', methods:['GET', 'POST'], name: 'login')]
-    public function login(Request $request): Response
+    public function login(AuthenticationUtils $authenticationUtils): Response
     {
-        return $this->render('users/login.html.twig');
+        $error = $authenticationUtils->getLastAuthenticationError();
+        $lastUsername = $authenticationUtils->getLastUsername();
+
+        return $this->render('auth/login.html.twig', [
+            'error' => $error,
+            'last_username' => $lastUsername
+        ]);
     }
 }

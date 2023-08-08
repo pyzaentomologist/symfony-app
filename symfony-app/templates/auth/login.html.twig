@@ -1,0 +1,7 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <div {{ react_component('Login', {error, last_username}) }}>
+        Loading...
+    </div>
+{% endblock %}

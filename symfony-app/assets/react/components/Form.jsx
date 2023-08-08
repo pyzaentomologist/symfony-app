@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import axios from "axios";
+import { handlePositionCategory } from "../utils/form-utils";
 
 export default function () {
   const [formData, setFormData] = useState({
@@ -51,7 +52,7 @@ export default function () {
     );
   };
 
-  const responseData = () => {
+  const showResponseData = () => {
     if (sendData && !serverError.errorExist) {
       return (
         <h3>
@@ -114,60 +115,6 @@ export default function () {
     }
   };
 
-  const handlePositionCategory = () => {
-    const positions = ["tester", "developer", "project manager"];
-    const categoriesNames = {
-      firstStage: ["testingSystems", "ideEnvironments", "projectMethodologies"],
-      secondStage: [
-        "reportingSystems",
-        "programmingLanguages",
-        "reportingSystems",
-      ],
-      thirdStage: ["seleniumKnowledge", "mysqlKnowledge", "scrumKnowledge"],
-    };
-    const categories = {
-      firstStage: [
-        "systemy testujące",
-        "środowiska ide",
-        "metodologie prowadzenia projektów",
-      ],
-      secondStage: [
-        "systemy raportowe",
-        "języki programowania",
-        "systemy raportowe",
-      ],
-      thirdStage: ["zna selenium", "zna mysql", "zna scrum"],
-    };
-    return positions.map((position, index) => {
-      if (formData.position === position) {
-        return (
-          <div key={position}>
-            <input
-              name={categoriesNames.firstStage[index]}
-              type="text"
-              placeholder={categories.firstStage[index]}
-              onChange={handleChangeValue}
-            />
-            <input
-              name={categoriesNames.secondStage[index]}
-              type="text"
-              placeholder={categories.secondStage[index]}
-              onChange={handleChangeValue}
-            />
-            <label htmlFor={categoriesNames.thirdStage[index]}>
-              {categories.thirdStage[index]}
-            </label>
-            <input
-              name={categoriesNames.thirdStage[index]}
-              type="checkbox"
-              onChange={handleChangeValue}
-            />
-          </div>
-        );
-      } else return;
-    });
-  };
-
   return (
     <form onSubmit={handleSubmitForm}>
       <input
@@ -227,10 +174,10 @@ export default function () {
         <option value="developer">developer</option>
         <option value="project manager">project manager</option>
       </select>
-      {handlePositionCategory()}
+      {handlePositionCategory(formData, handleChangeValue)}
 
       <button type="submit">Utwórz konto</button>
-      {responseData()}
+      {showResponseData()}
     </form>
   );
 }
