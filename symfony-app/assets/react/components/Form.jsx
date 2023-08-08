@@ -21,7 +21,7 @@ export default function () {
   const [checkPassword, setCheckPassword] = useState({
     check_password: "",
   });
-
+  const [submittedEmail, setSubmittedEmail] = useState("");
   const [passwordsMatch, setPasswordsMatch] = useState(true);
 
   const [sendData, setSendData] = useState(false);
@@ -52,10 +52,10 @@ export default function () {
   };
 
   const responseData = () => {
-    if (sendData) {
+    if (sendData && !serverError.errorExist) {
       return (
         <h3>
-          Użytkowniku, na podany adress e-mail: {formData.email} został wysłany
+          Użytkowniku, na podany adress e-mail: {submittedEmail} został wysłany
           mail z potwierdzeniem rejestracji oraz dane do logowania
         </h3>
       );
@@ -86,16 +86,26 @@ export default function () {
           "Content-Type": "application/json",
         },
       });
-      console.log(response.data);
       if (response.data) {
         setSendData(true);
+        setServerError({
+          errorExist: false,
+          message: "",
+        });
+        setSubmittedEmail(formData.email);
         return;
-      } else setSendData(false);
+      } else {
+        setSendData(false);
+        setServerError({
+          errorExist: true,
+          message: "Coś poszło nie tak, spróbuj ponownie później",
+        });
+      }
     } catch (error) {
       const message = error.response.data.errors;
       console.log(message);
       setServerError({ errorExist: true, message: message });
-      if (message === "This email is already in use.") {
+      if (message === "There is already an account with this email") {
         setServerError({
           errorExist: true,
           message: "Wskazany adres mailowy jest zajęty",

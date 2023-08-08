@@ -8,10 +8,6 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Component\Validator\Validator\ValidatorInterface;
-use App\Entity\User;
-use Symfony\Bridge\Twig\Mime\TemplatedEmail;
-use Symfony\Component\Mailer\MailerInterface;
 
 class UsersController extends AbstractController
 {
@@ -24,74 +20,9 @@ class UsersController extends AbstractController
     }
 
 
-    #[Route('/register', methods:['GET', 'POST'], name: 'register')]
-    public function register(Request $request, ValidatorInterface $validator, MailerInterface $mailer): Response
-    {
-        if ($request->isMethod('POST')) {
-            $data = json_decode($request->getContent(), true);
-            $user = new User();
-
-            $user->setFirstName($data['firstName']);
-            $user->setLastName($data['lastName']);
-            $user->setEmail($data['email']);
-            $user->setPassword($data['password']);
-            $user->setDescribeUser($data['describeUser']);
-            $user->setTestingSystems($data['testingSystems']);
-            $user->setreportingSystems($data['reportingSystems']);
-            $user->setSeleniumKnowledge($data['seleniumKnowledge']);
-            $user->setprojectMethodologies($data['projectMethodologies']);
-            $user->setScrumKnowledge($data['scrumKnowledge']);
-            $user->setIdeEnvironments($data['ideEnvironments']);
-            $user->setProgrammingLanguages($data['programmingLanguages']);
-            $user->setMysqlKnowledge($data['mysqlKnowledge']);
-            $user->setPosition($data['position']);
-
-            $errors = $validator->validate($user);
-
-            if ($errors->count() > 0) {
-                foreach ($errors as $error) {
-                    $errorMessage = $error->getMessage();
-                }
-                return $this->json(['errors' => $errorMessage], 400);
-            }
-
-            $classMetadata = $this->entityManager->getClassMetadata(User::class);
-            $requiredFields = [];
-
-            foreach ($classMetadata->getFieldNames() as $fieldName) {
-                if ($classMetadata->isNullable($fieldName) === false && $fieldName != 'id') {
-                    $requiredFields[] = $fieldName;
-                }
-            }
-
-            foreach ($requiredFields as $field) {
-                if (empty($data[$field])) {
-                    return $this->json(['errors' => "Field $field is required."], 400);
-                }
-            }
-
-            $this->entityManager->persist($user);
-            $this->entityManager->flush();
-
-            $newEmail = (new TemplatedEmail())
-                ->from($this->getParameter('app.mailer_address'))
-                ->to($data['email'])
-                ->subject("Potwierdzono logowanie")
-                ->htmlTemplate('emails/confirm.html.twig')
-                ->context([
-                    'data' => $data,
-                ]);
-
-            $mailer->send($newEmail);
 
 
-            return $this->json($data);
-        }
-
-        return $this->render('users/register.html.twig');
-    }
-
-    #[Route('/admin', name: 'app_users')]
+    #[Route('/admin', name: 'admin')]
     public function index(): Response
     {
         $users = $this->userRepository->findAll();
@@ -115,7 +46,7 @@ class UsersController extends AbstractController
             ];
             $usersData[] = $userData;
         }
-        dump($usersData);
+
         return $this->render('admin/admin.html.twig', array(
             'users' => $usersData
         ));
@@ -131,5 +62,19 @@ class UsersController extends AbstractController
         ));
     }
 
+    #[Route('/admin/delete/{id}', methods: ['GET', 'DELETE'], name: 'delete_user')]
+    public function delete($id): Response
+    {
+        $user = $this->userRepository->find($id);
+
+
+        $this->entityManager->remove($user);
+        $this->entityManager->flush();
+
+
+        return $this->json([
+            'message' => "Delete"
+        ]);
+    }
 
 }
