@@ -139,13 +139,17 @@ export default function () {
   };
 
   return (
-    <form onSubmit={handleSubmitForm}>
+    <form
+      onSubmit={handleSubmitForm}
+      className="max-w-md mx-auto p-4 bg-white rounded-lg shadow-md space-y-4"
+    >
       <input
         name="firstName"
         type="text"
         placeholder="Imię"
         onChange={handleChangeValue}
         required
+        className="w-full px-4 py-2 border rounded-md focus:outline-none focus:border-blue-500"
       />
       <input
         name="lastName"
@@ -153,6 +157,7 @@ export default function () {
         placeholder="Nazwisko"
         onChange={handleChangeValue}
         required
+        className="w-full px-4 py-2 border rounded-md focus:outline-none focus:border-blue-500"
       />
       <input
         name="username"
@@ -160,6 +165,7 @@ export default function () {
         placeholder="Adress e-mail"
         onChange={handleChangeValue}
         required
+        className="w-full px-4 py-2 border rounded-md focus:outline-none focus:border-blue-500"
       />
       <input
         name="password"
@@ -167,6 +173,7 @@ export default function () {
         placeholder="Hasło"
         onChange={handleChangeValue}
         required
+        className="w-full px-4 py-2 border rounded-md focus:outline-none focus:border-blue-500"
       />
       <input
         name="check_password"
@@ -174,6 +181,7 @@ export default function () {
         placeholder="Powtórz hasło"
         onChange={handleChangeSecondPassword}
         required
+        className="w-full px-4 py-2 border rounded-md focus:outline-none focus:border-blue-500"
       />
       {matchPassword()}
       <textarea
@@ -182,6 +190,7 @@ export default function () {
         maxLength="255"
         placeholder="Opis (maks. 255 znaków)"
         onChange={handleChangeValue}
+        className="w-full px-4 py-2 border rounded-md focus:outline-none focus:border-blue-500"
       ></textarea>
       <select
         name="position"
@@ -189,6 +198,7 @@ export default function () {
         onChange={handleChangeValue}
         required
         value={formData.position}
+        className="w-full px-4 py-2 border rounded-md focus:outline-none focus:border-blue-500"
       >
         <option value="" disabled defaultValue>
           Wybierz stanowisko
@@ -199,7 +209,12 @@ export default function () {
       </select>
       {handlePositionCategory(formData, handleChangeValue)}
 
-      <button type="submit">Utwórz konto</button>
+      <button
+        type="submit"
+        className="w-full px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 focus:outline-none"
+      >
+        Utwórz konto
+      </button>
       {showResponseData()}
     </form>
   );

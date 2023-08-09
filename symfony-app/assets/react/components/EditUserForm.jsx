@@ -105,7 +105,10 @@ export default function (props) {
   };
 
   return (
-    <form onSubmit={handleSubmitForm}>
+    <form
+      onSubmit={handleSubmitForm}
+      className="max-w-md mx-auto p-4 bg-white rounded-lg shadow-md space-y-4"
+    >
       <input
         name="firstName"
         type="text"
@@ -113,6 +116,7 @@ export default function (props) {
         onChange={handleChangeValue}
         value={formData.firstName}
         required
+        className="w-full px-4 py-2 border rounded-md focus:outline-none focus:border-blue-500"
       />
       <input
         name="lastName"
@@ -121,18 +125,21 @@ export default function (props) {
         onChange={handleChangeValue}
         value={formData.lastName}
         required
+        className="w-full px-4 py-2 border rounded-md focus:outline-none focus:border-blue-500"
       />
       <input
         name="password"
         type="password"
         placeholder="Hasło"
         onChange={handleChangeValue}
+        className="w-full px-4 py-2 border rounded-md focus:outline-none focus:border-blue-500"
       />
       <input
         name="check_password"
         type="password"
         placeholder="Powtórz hasło"
         onChange={handleChangeSecondPassword}
+        className="w-full px-4 py-2 border rounded-md focus:outline-none focus:border-blue-500"
       />
       {matchPassword()}
       <textarea
@@ -142,6 +149,7 @@ export default function (props) {
         placeholder="Opis (maks. 255 znaków)"
         onChange={handleChangeValue}
         value={formData.describeUser}
+        className="w-full px-4 py-2 border rounded-md focus:outline-none focus:border-blue-500"
       ></textarea>
       <select
         name="position"
@@ -149,6 +157,7 @@ export default function (props) {
         onChange={handleChangeValue}
         value={formData.position}
         required
+        className="w-full px-4 py-2 border rounded-md focus:outline-none focus:border-blue-500"
       >
         <option value="" disabled defaultValue>
           Wybierz stanowisko
@@ -159,7 +168,12 @@ export default function (props) {
       </select>
       {handlePositionCategory(formData, handleChangeValue)}
 
-      <button type="submit">Zapisz zmiany</button>
+      <button
+        type="submit"
+        className="w-full px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 focus:outline-none"
+      >
+        Zapisz zmiany
+      </button>
       {showResponseData()}
     </form>
   );
