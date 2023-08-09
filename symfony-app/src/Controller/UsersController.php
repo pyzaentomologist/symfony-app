@@ -4,9 +4,15 @@ namespace App\Controller;
 
 use App\Repository\UserRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Doctrine\ORM\EntityManagerInterface;
+use App\Services\EditUser;
+use App\Services\ShowUser;
+use App\Services\ShowUsers;
+
+use Exception;
 
 class UsersController extends AbstractController
 {
@@ -18,53 +24,45 @@ class UsersController extends AbstractController
         $this->entityManager = $entityManager;
     }
 
-
-
-
     #[Route('/admin', name: 'admin')]
-    public function index(): Response
+    public function index(ShowUsers $showUsers): Response
     {
-        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
-        $users = $this->userRepository->findAll();
-        $usersData = [];
-        foreach ($users as $user) {
-            $userData = [
-                'id' => $user->getId(),
-                'firstName' => $user->getFirstName(),
-                'lastName' => $user->getLastName(),
-                'username' => $user->getUsername(),
-                'describeUser' => $user->getDescribeUser(),
-                'testingSystems' => $user->getTestingSystems(),
-                'seleniumKnowledge' => $user->isSeleniumKnowledge(),
-                'projectMethodologies' => $user->getprojectMethodologies(),
-                'reportingSystems' => $user->getreportingSystems(),
-                'scrumKnowledge' => $user->isScrumKnowledge(),
-                'ideEnvironments' => $user->getIdeEnvironments(),
-                'programmingLanguages' => $user->getProgrammingLanguages(),
-                'mysqlKnowledge' => $user->isMysqlKnowledge(),
-                'position' => $user->getPosition(),
-            ];
-            $usersData[] = $userData;
-        }
+        $usersData = $showUsers->show();
 
         return $this->render('admin/admin.html.twig', array(
             'users' => $usersData
         ));
     }
 
-    #[Route('/admin/{id}', methods: ['GET'], name: 'app_user')]
-    public function show($id): Response
+    #[Route('/admin/{id}', methods: ['GET', 'POST'], name: 'app_user')]
+    public function edit($id, Request $request, EditUser $editUser, ShowUser $showUser): Response
     {
-        $user = $this->userRepository->find($id);
-        dump($user);
-        return $this->render('users/users.html.twig', array(
-            'user' => $user
-        ));
+
+        $user = $showUser->showUser($id);
+        // return $this->json($user, 200);
+        if ($request->isMethod('POST')) {
+            try {
+                $user = $editUser->edit($id, $request);
+                if(isset($user['errors'])){
+                    return $this->json($user, 400);
+                }
+                return $this->redirectToRoute('admin');
+            } catch (Exception $ex){
+
+                $this->addFlash('danger', $ex->getMessage());
+            }
+
+            return $this->json($user, 200);
+        }
+        return $this->render('users/edit.html.twig', [
+            'userData' => $user
+        ]);
     }
 
     #[Route('/admin/delete/{id}', methods: ['GET', 'DELETE'], name: 'delete_user')]
     public function delete($id): Response
     {
+
         $user = $this->userRepository->find($id);
 
 
@@ -74,7 +72,8 @@ class UsersController extends AbstractController
 
         return $this->json([
             'message' => "Delete"
-        ]);
+        ], 204);
+
     }
 
 }

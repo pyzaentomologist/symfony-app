@@ -37,7 +37,12 @@ class AuthController extends AbstractController
     {
         $error = $authenticationUtils->getLastAuthenticationError();
         $lastUsername = $authenticationUtils->getLastUsername();
-// dump($authenticationUtils);
+
+        if ($error) {
+
+            return $this->json('Wrong login or password', 401);
+
+        }
         return $this->render('auth/login.html.twig', [
             'error' => $error,
             'last_username' => $lastUsername

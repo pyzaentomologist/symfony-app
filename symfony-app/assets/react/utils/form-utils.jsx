@@ -24,6 +24,7 @@ export const handlePositionCategory = (formData, handleChangeValue) => {
     ],
     thirdStage: ["zna selenium", "zna mysql", "zna scrum"],
   };
+
   return positions.map((position, index) => {
     if (formData.position === position) {
       return (
@@ -33,21 +34,24 @@ export const handlePositionCategory = (formData, handleChangeValue) => {
             type="text"
             placeholder={categories.firstStage[index]}
             onChange={handleChangeValue}
+            checked={formData[categoriesNames.firstStage[index]]}
           />
           <input
             name={categoriesNames.secondStage[index]}
             type="text"
             placeholder={categories.secondStage[index]}
             onChange={handleChangeValue}
+            checked={formData[categoriesNames.secondStage[index]]}
           />
           <label htmlFor={categoriesNames.thirdStage[index]}>
             {categories.thirdStage[index]}
+            <input
+              name={categoriesNames.thirdStage[index]}
+              type="checkbox"
+              onChange={handleChangeValue}
+              checked={formData[categoriesNames.thirdStage[index]]}
+            />
           </label>
-          <input
-            name={categoriesNames.thirdStage[index]}
-            type="checkbox"
-            onChange={handleChangeValue}
-          />
         </div>
       );
     } else return;

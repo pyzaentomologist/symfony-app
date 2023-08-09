@@ -1,28 +1,7 @@
 {% extends 'base.html.twig' %}
-{% block body %}
-{% if error %}
- <h1>
-   {{ error.messageKey|trans(error.messageData, 'security') }}
-   {{dump(last_username)}}
- </h1>
-{% endif %}
- <form action={{ path('login') }} method="POST">
-      <input
-        name="_username"
-        id="_username"
-        type="email"
-        placeholder="Adress e-mail"
-        value="{{last_username}}"
-        required
-      />
-      <input
-        name="_password"
-        id="_password"
-        type="password"
-        placeholder="Hasło"
-        required
-      />
 
-      <button type="submit">Login</button>
-    </form>
+{% block body %}
+    <div {{ react_component('EditUser', {userData})}}>
+        Loading...
+    </div>
 {% endblock %}

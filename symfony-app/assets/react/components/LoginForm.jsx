@@ -6,13 +6,19 @@ export default function Form({ lastUsername }) {
     _username: lastUsername,
     _password: "",
   });
-  console.log(lastUsername);
+  const [serverError, setServerError] = useState(false);
   const handleChangeValue = (e) => {
     const { name, value } = e.target;
     setFormData((prevData) => ({
       ...prevData,
       [name]: value,
     }));
+  };
+
+  const showResponseData = () => {
+    if (serverError) {
+      return <h3>Niepoprawny login lub hasło</h3>;
+    }
   };
 
   const handleSubmitForm = async (e) => {
@@ -25,11 +31,13 @@ export default function Form({ lastUsername }) {
       const response = await axios.post("/login", requestData);
 
       console.log(response);
-      document.cookie = "foo=1";
-      // window.location.href = "/admin";
+      setServerError(false);
+      document.cookie = `foo=${formData._username}`;
+      window.location.href = "/admin";
       return;
     } catch (error) {
       console.log(error);
+      setServerError(true);
     }
   };
 
@@ -53,6 +61,7 @@ export default function Form({ lastUsername }) {
         required
       />
 
+      {showResponseData()}
       <button type="submit">Login</button>
     </form>
   );

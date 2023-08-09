@@ -1,36 +1,21 @@
 import React from "react";
 import axios from "axios";
+import { phpSessId, deleteCookie } from "../utils/get-cookie";
 
 export default function Navbar() {
-  const getCookieValue = (name) => {
-    const cookies = document.cookie.split("; ");
-    for (const cookie of cookies) {
-      const [cookieName, cookieValue] = cookie.split("=");
-      if (cookieName === name) {
-        return cookieValue;
-      }
-    }
-    return null;
-  };
-
-  const phpSessId = getCookieValue("foo");
-  const deleteCookie = (name) => {
-    document.cookie =
-      name + "=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
-  };
-
   const handleLogoutClick = async () => {
     deleteCookie("foo");
     try {
       await axios.post("/logout");
+      window.location.href = "/login";
     } catch (error) {
       console.error("Błąd podczas wylogowywania:", error);
     }
   };
-  if (phpSessId === "1") {
+  if (phpSessId) {
     return (
       <ul className="text-1xl">
-        {/* <li>{user.username}</li> */}
+        <li>Zalogowany: {phpSessId}</li>
         <li>
           <div>
             <a href={`/admin`} className="m-8">
