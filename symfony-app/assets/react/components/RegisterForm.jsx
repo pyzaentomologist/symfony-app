@@ -1,11 +1,12 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
+import { handlePositionCategory } from "../utils/form-utils";
 
 export default function () {
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
-    email: "",
+    username: "",
     password: "",
     describeUser: "",
     position: "",
@@ -21,6 +22,7 @@ export default function () {
   const [checkPassword, setCheckPassword] = useState({
     check_password: "",
   });
+  const [count, setCount] = useState(3);
   const [submittedEmail, setSubmittedEmail] = useState("");
   const [passwordsMatch, setPasswordsMatch] = useState(true);
 
@@ -30,6 +32,28 @@ export default function () {
     errorExist: false,
     message: "",
   });
+
+  useEffect(() => {
+    if (sendData && !serverError.errorExist) {
+      const interval = setInterval(async () => {
+        setCount((prevCount) => prevCount - 1);
+      }, 1000);
+      console.log(count);
+
+      const redirectToLogin = () => {
+        clearInterval(interval);
+        window.location.href = "/login";
+      };
+
+      if (count <= 0) {
+        redirectToLogin();
+      }
+
+      return () => {
+        clearInterval(interval);
+      };
+    }
+  }, [sendData, serverError, count]);
 
   const handleCheckPassword = () => {
     return formData.password === checkPassword.check_password;
@@ -51,12 +75,13 @@ export default function () {
     );
   };
 
-  const responseData = () => {
+  const showResponseData = () => {
     if (sendData && !serverError.errorExist) {
       return (
         <h3>
           Użytkowniku, na podany adress e-mail: {submittedEmail} został wysłany
-          mail z potwierdzeniem rejestracji oraz dane do logowania
+          mail z potwierdzeniem rejestracji oraz dane do logowania. Za {count}{" "}
+          sek. nastąpi przekierowanie na stronę z logowaniem.
         </h3>
       );
     } else if (serverError.errorExist) {
@@ -92,8 +117,7 @@ export default function () {
           errorExist: false,
           message: "",
         });
-        setSubmittedEmail(formData.email);
-        return;
+        setSubmittedEmail(formData.username);
       } else {
         setSendData(false);
         setServerError({
@@ -103,69 +127,15 @@ export default function () {
       }
     } catch (error) {
       const message = error.response.data.errors;
-      console.log(message);
-      setServerError({ errorExist: true, message: message });
-      if (message === "There is already an account with this email") {
+      if (message === "There is already an account with this username") {
         setServerError({
           errorExist: true,
           message: "Wskazany adres mailowy jest zajęty",
         });
+      } else {
+        setServerError({ errorExist: true, message: message });
       }
     }
-  };
-
-  const handlePositionCategory = () => {
-    const positions = ["tester", "developer", "project manager"];
-    const categoriesNames = {
-      firstStage: ["testingSystems", "ideEnvironments", "projectMethodologies"],
-      secondStage: [
-        "reportingSystems",
-        "programmingLanguages",
-        "reportingSystems",
-      ],
-      thirdStage: ["seleniumKnowledge", "mysqlKnowledge", "scrumKnowledge"],
-    };
-    const categories = {
-      firstStage: [
-        "systemy testujące",
-        "środowiska ide",
-        "metodologie prowadzenia projektów",
-      ],
-      secondStage: [
-        "systemy raportowe",
-        "języki programowania",
-        "systemy raportowe",
-      ],
-      thirdStage: ["zna selenium", "zna mysql", "zna scrum"],
-    };
-    return positions.map((position, index) => {
-      if (formData.position === position) {
-        return (
-          <div key={position}>
-            <input
-              name={categoriesNames.firstStage[index]}
-              type="text"
-              placeholder={categories.firstStage[index]}
-              onChange={handleChangeValue}
-            />
-            <input
-              name={categoriesNames.secondStage[index]}
-              type="text"
-              placeholder={categories.secondStage[index]}
-              onChange={handleChangeValue}
-            />
-            <label htmlFor={categoriesNames.thirdStage[index]}>
-              {categories.thirdStage[index]}
-            </label>
-            <input
-              name={categoriesNames.thirdStage[index]}
-              type="checkbox"
-              onChange={handleChangeValue}
-            />
-          </div>
-        );
-      } else return;
-    });
   };
 
   return (
@@ -185,8 +155,8 @@ export default function () {
         required
       />
       <input
-        name="email"
-        type="email"
+        name="username"
+        type="username"
         placeholder="Adress e-mail"
         onChange={handleChangeValue}
         required
@@ -227,10 +197,10 @@ export default function () {
         <option value="developer">developer</option>
         <option value="project manager">project manager</option>
       </select>
-      {handlePositionCategory()}
+      {handlePositionCategory(formData, handleChangeValue)}
 
       <button type="submit">Utwórz konto</button>
-      {responseData()}
+      {showResponseData()}
     </form>
   );
 }

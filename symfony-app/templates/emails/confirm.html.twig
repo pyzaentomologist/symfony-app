@@ -1,6 +1,22 @@
 <span>
 Cześć <strong>{{ data.firstName }}</strong>,
 <br>oto Twoje dane logowania:
-<br>email:<strong>{{data.email }}</strong>
-<br>hasło: <strong>{{data.password }}</strong>
-</span>
+<br>email:<strong>{{data.username }}</strong>
+<br>hasło: <strong>{{password }}</strong>
+<br>Imię: <strong>{{data.firstName }}</strong>
+<br>Nazwisko: <strong>{{data.lastName }}</strong>
+<br>Opis: <strong>{{data.describeUser }}</strong>
+<br>Stanowisko: <strong>{{data.position }}</strong>
+{% if data.position == 'tester' %}
+<br>systemy testujące: <strong>{{ data.testingSystems ?? 'brak' }}</strong>
+<br>systemy raportowe: <strong>{{ data.reportingSystems ?? 'brak' }}</strong>
+<br>zna selenium: <strong>{{ data.seleniumKnowledge is defined ? (data.seleniumKnowledge ? 'Tak' : 'nie') : 'brak' }}</strong>
+{% elseif data.position == 'developer' %}
+<br>środowiska ide: <strong>{{ data.ideEnvironments ?? 'brak' }}</strong>
+<br>języki programowania: <strong>{{ data.programmingLanguages ?? 'brak' }}</strong>
+<br>zna mysql: <strong>{{ data.mysqlKnowledge is defined ? (data.mysqlKnowledge ? 'Tak' : 'nie') : 'brak' }}</strong>
+{% elseif data.position == 'project manager' %}
+<br>metodologie prowadzenia projektów: <strong>{{ data.projectMethodologies ?? 'brak' }}</strong>
+<br>systemy raportowe: <strong>{{ data.reportingSystems ?? 'brak' }}</strong>
+<br>zna scrum: <strong>{{ data.scrumKnowledge is defined ? (data.scrumKnowledge ? 'Tak' : 'nie') : 'brak' }}</strong>
+{% endif %}
