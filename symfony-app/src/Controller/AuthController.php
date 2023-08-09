@@ -13,7 +13,7 @@ use Exception;
 class AuthController extends AbstractController
 {
 
-    #[Route('/register', methods:['GET', 'POST'], name: 'register')]
+    #[Route('/', methods:['GET', 'POST'], name: 'register')]
     public function register(Request $request, CreateUser $createUser): Response
     {
         if ($request->isMethod('POST')) {

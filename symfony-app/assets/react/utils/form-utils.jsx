@@ -35,6 +35,7 @@ export const handlePositionCategory = (formData, handleChangeValue) => {
             placeholder={categories.firstStage[index]}
             onChange={handleChangeValue}
             checked={formData[categoriesNames.firstStage[index]]}
+            className="w-full mt-6 px-4 py-2 border rounded-md focus:outline-none focus:border-blue-500"
           />
           <input
             name={categoriesNames.secondStage[index]}
@@ -42,14 +43,19 @@ export const handlePositionCategory = (formData, handleChangeValue) => {
             placeholder={categories.secondStage[index]}
             onChange={handleChangeValue}
             checked={formData[categoriesNames.secondStage[index]]}
+            className="w-full mt-6 px-4 py-2 border rounded-md focus:outline-none focus:border-blue-500"
           />
-          <label htmlFor={categoriesNames.thirdStage[index]}>
+          <label
+            htmlFor={categoriesNames.thirdStage[index]}
+            className="flex mt-6 items-center space-x-2"
+          >
             {categories.thirdStage[index]}
             <input
               name={categoriesNames.thirdStage[index]}
               type="checkbox"
               onChange={handleChangeValue}
               checked={formData[categoriesNames.thirdStage[index]]}
+              className="form-checkbox mx-4 text-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-600"
             />
           </label>
         </div>

@@ -42,7 +42,10 @@ export default function Form({ lastUsername }) {
   };
 
   return (
-    <form onSubmit={handleSubmitForm}>
+    <form
+      className="max-w-md mx-auto p-4 bg-white rounded-lg shadow-md"
+      onSubmit={handleSubmitForm}
+    >
       <input
         name="_username"
         id="_username"
@@ -51,6 +54,7 @@ export default function Form({ lastUsername }) {
         onChange={handleChangeValue}
         value={formData._username}
         required
+        className="w-full px-4 py-2 mb-2 border rounded-md focus:outline-none focus:border-blue-500"
       />
       <input
         name="_password"
@@ -59,10 +63,16 @@ export default function Form({ lastUsername }) {
         placeholder="Hasło"
         onChange={handleChangeValue}
         required
+        className="w-full px-4 py-2 mb-2 border rounded-md focus:outline-none focus:border-blue-500"
       />
 
       {showResponseData()}
-      <button type="submit">Login</button>
+      <button
+        className="w-full px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 focus:outline-none"
+        type="submit"
+      >
+        Zaloguj się
+      </button>
     </form>
   );
 }

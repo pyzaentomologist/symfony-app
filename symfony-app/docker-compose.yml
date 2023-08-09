@@ -5,10 +5,8 @@ services:
   db:
     container_name: database
     image: mysql:5.7
-    # volumes:
-    #   - database:/var/lib/mysql
     ports:
-      - "3306:3306"
+      - "3308:3306"
     environment:
       MYSQL_ROOT_HOST: db
       MYSQL_ROOT_PORT: 3306
@@ -17,6 +15,8 @@ services:
       MYSQL_USER: user
       MYSQL_PASSWORD: password
     restart: always
+  ###< doctrine/doctrine-bundle ###
+
   phpmyadmin:
     container_name: pma
     depends_on:
@@ -26,6 +26,22 @@ services:
       - "8083:80"
     environment:
       PMA_HOST: db
+    restart: always
+
+  app:
+    container_name: symfony-app
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - .:/var/www/html
+    ports:
+      - "8081:8000"
+    depends_on:
+      - db
+    environment:
+      APP_ENV: dev
+      DATABASE_URL: mysql://user:password@db:3306/database
     restart: always
 
 volumes:
