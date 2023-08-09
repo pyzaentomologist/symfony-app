@@ -1,7 +1,7 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-    <div {{ react_component('Login', {error, last_username}) }}>
+    <div {{ react_component('Login', {error: error|json_encode, last_username: last_username|json_encode}) }}>
         Loading...
     </div>
 {% endblock %}

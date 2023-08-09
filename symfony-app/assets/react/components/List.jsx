@@ -6,7 +6,7 @@ export default function UserList(props) {
       {props.users.map((user, index) => {
         return (
           <li key={index}>
-            {user.email}
+            {user.username}
             <div>
               <a href={`/edit/${user.id}`} className="m-8">
                 Edytuj {user.id}

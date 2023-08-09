@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { handlePositionCategory } from "../utils/form-utils";
 
@@ -6,7 +6,7 @@ export default function () {
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
-    email: "",
+    username: "",
     password: "",
     describeUser: "",
     position: "",
@@ -22,6 +22,7 @@ export default function () {
   const [checkPassword, setCheckPassword] = useState({
     check_password: "",
   });
+  const [count, setCount] = useState(3);
   const [submittedEmail, setSubmittedEmail] = useState("");
   const [passwordsMatch, setPasswordsMatch] = useState(true);
 
@@ -31,6 +32,28 @@ export default function () {
     errorExist: false,
     message: "",
   });
+
+  useEffect(() => {
+    if (sendData && !serverError.errorExist) {
+      const interval = setInterval(async () => {
+        setCount((prevCount) => prevCount - 1);
+      }, 1000);
+      console.log(count);
+
+      const redirectToLogin = () => {
+        clearInterval(interval);
+        window.location.href = "/login";
+      };
+
+      if (count <= 0) {
+        redirectToLogin();
+      }
+
+      return () => {
+        clearInterval(interval);
+      };
+    }
+  }, [sendData, serverError, count]);
 
   const handleCheckPassword = () => {
     return formData.password === checkPassword.check_password;
@@ -57,7 +80,8 @@ export default function () {
       return (
         <h3>
           Użytkowniku, na podany adress e-mail: {submittedEmail} został wysłany
-          mail z potwierdzeniem rejestracji oraz dane do logowania
+          mail z potwierdzeniem rejestracji oraz dane do logowania. Za {count}{" "}
+          sek. nastąpi przekierowanie na stronę z logowaniem.
         </h3>
       );
     } else if (serverError.errorExist) {
@@ -93,8 +117,7 @@ export default function () {
           errorExist: false,
           message: "",
         });
-        setSubmittedEmail(formData.email);
-        return;
+        setSubmittedEmail(formData.username);
       } else {
         setSendData(false);
         setServerError({
@@ -104,13 +127,13 @@ export default function () {
       }
     } catch (error) {
       const message = error.response.data.errors;
-      console.log(message);
-      setServerError({ errorExist: true, message: message });
-      if (message === "There is already an account with this email") {
+      if (message === "There is already an account with this username") {
         setServerError({
           errorExist: true,
           message: "Wskazany adres mailowy jest zajęty",
         });
+      } else {
+        setServerError({ errorExist: true, message: message });
       }
     }
   };
@@ -132,8 +155,8 @@ export default function () {
         required
       />
       <input
-        name="email"
-        type="email"
+        name="username"
+        type="username"
         placeholder="Adress e-mail"
         onChange={handleChangeValue}
         required

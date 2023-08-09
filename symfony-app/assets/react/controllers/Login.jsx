@@ -1,7 +1,8 @@
 import React from "react";
 
-import Form from "../components/Form";
+import Form from "../components/LoginForm";
 
 export default function (props) {
-  console.log(props);
+  const cleanLastUsername = props.last_username.replace(/^"|"$/g, "");
+  return <Form lastUsername={cleanLastUsername} />;
 }

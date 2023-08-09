@@ -31,7 +31,7 @@ class CreateUser extends AbstractController{
 
     $hasherdPassword = $this->userPasswordHasher->hashPassword($user, $data['password']);
 
-		$user->setEmail($data['email']);
+		$user->setUsername($data['username']);
 		$user->setRoles(['ROLE_USER']);
 		$user->setPassword($hasherdPassword);
 		$user->setFirstName($data['firstName']);

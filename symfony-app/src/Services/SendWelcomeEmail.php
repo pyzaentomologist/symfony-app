@@ -17,7 +17,7 @@ class SendWelcomeEmail extends AbstractController{
 		$data = $array['user'];
       $newEmail = (new TemplatedEmail())
           ->from($this->getParameter('app.mailer_address'))
-          ->to($data->getEmail())
+          ->to($data->getUsername())
           ->subject("Potwierdzono logowanie")
           ->htmlTemplate('emails/confirm.html.twig')
           ->context([

@@ -4,7 +4,6 @@ namespace App\Controller;
 
 use App\Repository\UserRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Doctrine\ORM\EntityManagerInterface;
@@ -25,6 +24,7 @@ class UsersController extends AbstractController
     #[Route('/admin', name: 'admin')]
     public function index(): Response
     {
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
         $users = $this->userRepository->findAll();
         $usersData = [];
         foreach ($users as $user) {
@@ -32,7 +32,7 @@ class UsersController extends AbstractController
                 'id' => $user->getId(),
                 'firstName' => $user->getFirstName(),
                 'lastName' => $user->getLastName(),
-                'email' => $user->getEmail(),
+                'username' => $user->getUsername(),
                 'describeUser' => $user->getDescribeUser(),
                 'testingSystems' => $user->getTestingSystems(),
                 'seleniumKnowledge' => $user->isSeleniumKnowledge(),
