@@ -48,7 +48,7 @@ export default function Navbar() {
         </li>
         <li>
           <div>
-            <a href={`/register`} className="m-8 text-blue-500 hover:underline">
+            <a href={`/`} className="m-8 text-blue-500 hover:underline">
               Register
             </a>
           </div>
