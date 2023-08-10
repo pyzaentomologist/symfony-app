@@ -22,13 +22,15 @@ RUN apt-get install -y nodejs
 RUN curl -sS https://get.symfony.com/cli/installer | bash && mv /root/.symfony5/bin/symfony /usr/local/bin/symfony
 # Copy composer files and install dependencies
 COPY composer.json composer.lock ./
-RUN composer install --no-scripts --no-autoloader
+#install
+RUN composer install
 
 # Copy application code
 COPY . .
 
 # Install npm packages
 COPY package.json package-lock.json ./
+#install
 RUN npm install
 
 # Generate the autoloader
