@@ -20,21 +20,27 @@ RUN apt-get install -y nodejs
 
 # Install Symfony CLI
 RUN curl -sS https://get.symfony.com/cli/installer | bash && mv /root/.symfony5/bin/symfony /usr/local/bin/symfony
+
 # Copy composer files and install dependencies
 COPY composer.json composer.lock ./
-#install
-RUN composer install
+# Install Composer dependencies
+RUN COMPOSER_ALLOW_SUPERUSER=1 composer install --no-scripts --no-autoloader --no-interaction
 
 # Copy application code
 COPY . .
 
+# Change directory to project root
+WORKDIR /var/www/html
+
 # Install npm packages
 COPY package.json package-lock.json ./
-#install
 RUN npm install
 
 # Generate the autoloader
 RUN composer dump-autoload --optimize
+
+# Run Symfony post-installation script
+RUN composer run-script post-install-cmd
 
 # Expose port 8000 to the Docker host
 EXPOSE 8000
