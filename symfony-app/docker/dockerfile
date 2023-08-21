@@ -42,8 +42,12 @@ RUN composer dump-autoload --optimize
 # Run Symfony post-installation script
 RUN composer run-script post-install-cmd
 
+COPY docker/entrypoint.sh /usr/local/bin/entrypoint
+RUN chmod +x /usr/local/bin/entrypoint
+
 # Expose port 8000 to the Docker host
 EXPOSE 8000
 
 # Start PHP-FPM
+ENTRYPOINT ["/usr/local/bin/entrypoint"]
 CMD ["php-fpm"]

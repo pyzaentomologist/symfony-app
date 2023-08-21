@@ -32,18 +32,10 @@ https://myaccount.google.com/apppasswords
 
 # MAILER_ADDRESS=twojadres@gmail.com
 
-# uruchomienie migracji
+# uruchomienie dev w trybie watch - kompilacja plików js przy każdej zmianie
 
-docker-compose exec app php bin/console doctrine:migrations:migrate
+docker-compose exec app npm run watch
 
-# uruchomienie serwera
+# port 8080
 
-docker-compose exec app symfony local:server:start -d
-
-# uruchomienie dev-servera
-
-docker-compose exec app npm run dev-server
-
-# port 8081
-
-localhost:8081
+localhost:8080
